@@ -5,7 +5,7 @@ export const FooterNav = () => (
     <ul className="nav__list">
       <li className="nav__item">
         <a
-          href="https://github.com/mate-academy/react_phone-catalog"
+          href="https://github.com/yevheniikulish"
           target="_blank"
           className="nav__link"
           rel="noreferrer"
