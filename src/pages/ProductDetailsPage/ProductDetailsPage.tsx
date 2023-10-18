@@ -36,7 +36,7 @@ import {
   HandleFavouritesStorageContext,
 } from '../../contexts/HandleFavouritesStorageContext';
 
-export const PhoneDetailsPage = () => {
+export const ProductDetailsPage = () => {
   const [phoneInfo, setPhoneInfo] = useState<PhoneInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState('');
