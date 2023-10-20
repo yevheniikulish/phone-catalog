@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -8,15 +7,11 @@ import classNames from 'classnames';
 
 import { BackButton } from '../../components/BackButton';
 
-import { removeFromCartStorage } from '../../functions/removeFromCartStorage';
-
 import { CartType } from '../../types/CartType';
 import { Phone } from '../../types/Phone';
 
-import { CartStorageContext } from '../../contexts/CartStorageContext';
-import {
-  HandleCartStorageContext,
-} from '../../contexts/HandleCartStorageContext';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { actions as cartActions } from '../../store/cartReducer';
 
 type Operator = 'plus' | 'minus';
 
@@ -25,24 +20,24 @@ export const CartPage = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [isMessage, setIsMessage] = useState(false);
 
-  const cartStorage = useContext(CartStorageContext);
-  const setCartStorage = useContext(HandleCartStorageContext);
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(state => state.cart);
 
   useEffect(() => {
-    setCartStorage(JSON.parse(localStorage.getItem('cart') || '[]'));
+    dispatch(cartActions.set());
   }, []);
 
   useEffect(() => {
-    setTotalQuantity(cartStorage.reduce((
+    setTotalQuantity(cart.reduce((
       total: number,
       { quantity }: { quantity: number },
     ) => total + quantity, 0));
 
-    setTotalPrice(cartStorage.reduce((
+    setTotalPrice(cart.reduce((
       total: number,
       { quantity, product }: { quantity: number, product: Phone },
     ) => total + quantity * (Math.round(product.price / 10) * 10 - 1), 0));
-  }, [cartStorage]);
+  }, [cart]);
 
   const getMessage = useCallback(() => {
     setIsMessage(true);
@@ -65,19 +60,15 @@ export const CartPage = () => {
 
     const newQuantity = quantity + ((operator === 'plus') ? 1 : -1);
 
-    const newProductQuantityInfo = cartStorage.find((
+    const newProductQuantityInfo = cart.find((
       { id }: { id: string },
     ) => (
       product?.id === id
-    ));
+    )) as CartType;
 
-    if (newProductQuantityInfo) {
-      newProductQuantityInfo.quantity = newQuantity;
-    }
+    // localStorage.setItem('cart', JSON.stringify(cart));
 
-    localStorage.setItem('cart', JSON.stringify(cartStorage));
-
-    setCartStorage([...cartStorage]);
+    dispatch(cartActions.updateQuantity({ ...newProductQuantityInfo, quantity: newQuantity }));
   };
 
   return (
@@ -89,14 +80,14 @@ export const CartPage = () => {
       </h1>
 
       <div className="cart__container">
-        {!cartStorage.length ? (
+        {!cart.length ? (
           <div className="no-results">
             Your cart is empty
           </div>
         ) : (
           <>
             <div className="cart__products">
-              {cartStorage.map(({ product, quantity, id }: CartType) => (
+              {cart.map(({ product, quantity, id }: CartType) => (
                 <div
                   className="cart__product"
                   key={id}
@@ -109,10 +100,7 @@ export const CartPage = () => {
                         'cart__delete-button--tablet',
                       )}
                       aria-label="Delete"
-                      onClick={removeFromCartStorage(
-                        product,
-                        setCartStorage,
-                      )}
+                      onClick={() => dispatch(cartActions.take({ product, quantity, id }))}
                       data-cy="cartDeleteButton"
                     />
 
@@ -162,10 +150,7 @@ export const CartPage = () => {
                       type="button"
                       className="cart__delete-button cart__delete-button--phone"
                       aria-label="Delete"
-                      onClick={removeFromCartStorage(
-                        product,
-                        setCartStorage,
-                      )}
+                      onClick={() => dispatch(cartActions.take({ product, quantity, id }))}
                       data-cy="cartDeleteButton"
                     />
                   </div>

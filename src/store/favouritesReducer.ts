@@ -10,9 +10,17 @@ const favouritesSlice = createSlice({
   reducers: {
     add: (favourites, action: PayloadAction<Phone>) => {
       favourites.push(action.payload);
+      localStorage.setItem('favourites', JSON.stringify(favourites));
     },
     take: (favourites, action: PayloadAction<Phone>) => {
-      return favourites.filter(phone => phone !== action.payload);
+      const newFavourites = favourites.filter(phone => phone.id !== action.payload.id);
+
+      localStorage.setItem('favourites', JSON.stringify(newFavourites));
+
+      return newFavourites;
+    },
+    set: () => {
+      return JSON.parse(localStorage.getItem('favourites') || '[]');
     },
   },
 });

@@ -1,5 +1,5 @@
 import React, {
-  useContext,
+  // useContext,
   useEffect,
   useState,
 } from 'react';
@@ -13,28 +13,16 @@ import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 import { getPhones } from '../../functions/getPhones';
 import { getPhoneInfo } from '../../functions/getProductInfo';
-import { addToCartStorage } from '../../functions/addToCartStorage';
-import { removeFromCartStorage } from '../../functions/removeFromCartStorage';
-import {
-  removeFromFavouritesStorage,
-} from '../../functions/removeFromFavouritesStorage';
-import { addToFavouritesStorage } from '../../functions/addToFavouritesStorage';
 
 import { PhoneInfo } from '../../types/PhoneInfo';
 import { Phone } from '../../types/Phone';
 
 import { colors } from '../../services/colors';
 
-import { CartStorageContext } from '../../contexts/CartStorageContext';
-import {
-  FavouritesStorageContext,
-} from '../../contexts/FavouritesStorageContext';
-import {
-  HandleCartStorageContext,
-} from '../../contexts/HandleCartStorageContext';
-import {
-  HandleFavouritesStorageContext,
-} from '../../contexts/HandleFavouritesStorageContext';
+import { actions as cartActions } from '../../store/cartReducer';
+import { actions as favouritesActions } from '../../store/favouritesReducer';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const ProductDetailsPage = () => {
   const [phoneInfo, setPhoneInfo] = useState<PhoneInfo | null>(null);
@@ -42,34 +30,21 @@ export const ProductDetailsPage = () => {
   const [currentImage, setCurrentImage] = useState('');
   const [currentCapacity, setCurrentCapacity] = useState('');
   const [currentColor, setCurrentColor] = useState('');
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const [isAddedToFavourites, setIsAddedToFavourites] = useState(false);
   const [phone, setPhone] = useState<Phone | null>(null);
   const [isError, setIsError] = useState(false);
 
-  const cartStorage = useContext(CartStorageContext);
-  const favouritesStorage = useContext(FavouritesStorageContext);
-  const setCartStorage = useContext(HandleCartStorageContext);
-  const setFavouritesStorage = useContext(HandleFavouritesStorageContext);
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(state => state.cart);
+  const favourites = useAppSelector(state => state.favourites);
 
   useEffect(() => {
-    setCartStorage(JSON.parse(localStorage.getItem('cart') || '[]'));
-    setFavouritesStorage(
-      JSON.parse(localStorage.getItem('favourites') || '[]'),
-    );
+    dispatch(cartActions.set());
+    dispatch(favouritesActions.set());
   }, []);
 
   const { productId } = useParams();
 
   useEffect(() => {
-    setIsAddedToCart(cartStorage.some((
-      { product }: { product: Phone },
-    ) => product.phoneId === phoneInfo?.id));
-
-    setIsAddedToFavourites(favouritesStorage.some(product => (
-      product.phoneId === phoneInfo?.id
-    )));
-
     getPhones()
       .then(phones => {
         setPhone(phones.find((
@@ -120,7 +95,7 @@ export const ProductDetailsPage = () => {
 
         <BackButton />
 
-        {isError ? (
+        {(!phone || isError) ? (
           <h2 className="no-results">
             Phone was not found
           </h2>
@@ -243,18 +218,14 @@ export const ProductDetailsPage = () => {
                   </p>
 
                   <div className="product-details__buttons">
-                    {isAddedToCart ? (
+                    {cart.some(product => product.id === phone.id) ? (
                       <button
                         className={classNames(
                           'product-details__cart-button',
                           'product-details__cart-button--added',
                         )}
                         type="button"
-                        onClick={removeFromCartStorage(
-                          phone,
-                          setCartStorage,
-                          setIsAddedToCart,
-                        )}
+                        onClick={() => dispatch(cartActions.take({ product: phone, id: (phone?.id || '0'), quantity: 1 }))}
                       >
                         Added to cart
                       </button>
@@ -262,11 +233,7 @@ export const ProductDetailsPage = () => {
                       <button
                         className="product-details__cart-button"
                         type="button"
-                        onClick={addToCartStorage(
-                          phone,
-                          setIsAddedToCart,
-                          setCartStorage,
-                        )}
+                        onClick={() => dispatch(cartActions.add({ product: phone, id: (phone?.id || '0'), quantity: 1 }))}
                       >
                         Add to cart
                       </button>
@@ -275,24 +242,16 @@ export const ProductDetailsPage = () => {
                     <button
                       type="button"
                       className="product-details__favourites-button"
-                      onClick={isAddedToFavourites
-                        ? removeFromFavouritesStorage(
-                          phone,
-                          setFavouritesStorage,
-                          setIsAddedToFavourites,
-                        )
-                        : addToFavouritesStorage(
-                          phone,
-                          setFavouritesStorage,
-                          setIsAddedToFavourites,
-                        )}
+                      onClick={() => (favourites.some(product => product.id === phone.id)
+                        ? dispatch(favouritesActions.take(phone))
+                        : dispatch(favouritesActions.add(phone)))}
                     >
                       <div
                         className={classNames(
                           'product-details__favourites-icon',
                           {
                             'product-details__favourites-icon--added': (
-                              isAddedToFavourites
+                              favourites.some(product => product.id === phone.id)
                             ),
                           },
                         )}

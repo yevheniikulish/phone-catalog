@@ -10,9 +10,30 @@ const cartSlice = createSlice({
   reducers: {
     add: (cart, action: PayloadAction<CartType>) => {
       cart.push(action.payload);
+      localStorage.setItem('cart', JSON.stringify(cart));
     },
     take: (cart, action: PayloadAction<CartType>) => {
-      return cart.filter(phone => phone !== action.payload);
+      const newCart = cart.filter(product => product.id !== action.payload.id);
+
+      localStorage.setItem('cart', JSON.stringify(newCart));
+
+      return newCart;
+    },
+    updateQuantity: (cart, action: PayloadAction<CartType>) => {
+      const newCart = cart.map(product => {
+        if (product.id !== action.payload.id) {
+          return product;
+        }
+
+        return { ...product, quantity: action.payload.quantity };
+      });
+
+      localStorage.setItem('cart', JSON.stringify(newCart));
+
+      return newCart;
+    },
+    set: () => {
+      return JSON.parse(localStorage.getItem('cart') || '[]');
     },
   },
 });

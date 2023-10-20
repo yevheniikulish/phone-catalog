@@ -43,7 +43,6 @@ export const Pagination: React.FC<Props> = ({
       >
         {page}
       </button>
-      // console.log(page)
     ));
   };
 

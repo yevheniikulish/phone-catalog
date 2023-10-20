@@ -1,39 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-
-import { addToCartStorage } from '../../functions/addToCartStorage';
-import { removeFromCartStorage } from '../../functions/removeFromCartStorage';
-import { addToFavouritesStorage } from '../../functions/addToFavouritesStorage';
-import {
-  removeFromFavouritesStorage,
-} from '../../functions/removeFromFavouritesStorage';
-
 import { Phone } from '../../types/Phone';
 
-import { CartStorageContext } from '../../contexts/CartStorageContext';
-import {
-  FavouritesStorageContext,
-} from '../../contexts/FavouritesStorageContext';
-import {
-  HandleFavouritesStorageContext,
-} from '../../contexts/HandleFavouritesStorageContext';
-import {
-  HandleCartStorageContext,
-} from '../../contexts/HandleCartStorageContext';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { actions as cartActions } from '../../store/cartReducer';
+import { actions as favouritesActions } from '../../store/favouritesReducer';
 
 type Props = {
   product: Phone;
 };
 
 export const PhoneCard: React.FC<Props> = ({ product }) => {
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const [isAddedToFavourites, setIsAddedToFavourites] = useState(false);
-
-  const cartStorage = useContext(CartStorageContext);
-  const favouritesStorage = useContext(FavouritesStorageContext);
-  const setFavouritesStorage = useContext(HandleFavouritesStorageContext);
-  const setCartStorage = useContext(HandleCartStorageContext);
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(state => state.cart);
+  const favourites = useAppSelector(state => state.favourites);
 
   const {
     image,
@@ -47,13 +28,8 @@ export const PhoneCard: React.FC<Props> = ({ product }) => {
   } = product;
 
   useEffect(() => {
-    setIsAddedToCart(cartStorage.some((
-      { id }: { id: string },
-    ) => id === product.id));
-
-    setIsAddedToFavourites(favouritesStorage.some((
-      { id }: { id: string },
-    ) => id === product.id));
+    dispatch(cartActions.set());
+    dispatch(favouritesActions.set());
   }, []);
 
   return (
@@ -124,18 +100,14 @@ export const PhoneCard: React.FC<Props> = ({ product }) => {
         </div>
 
         <div className="product-card__interaction-block">
-          {isAddedToCart ? (
+          {cart.some(c => c.id === product.id) ? (
             <button
               className={classNames(
                 'product-card__cart-button',
                 'product-card__cart-button--added',
               )}
               type="button"
-              onClick={removeFromCartStorage(
-                product,
-                setCartStorage,
-                setIsAddedToCart,
-              )}
+              onClick={() => dispatch(cartActions.take({ product, id: product.id, quantity: 1 }))}
             >
               Added to cart
             </button>
@@ -143,11 +115,7 @@ export const PhoneCard: React.FC<Props> = ({ product }) => {
             <button
               className="product-card__cart-button"
               type="button"
-              onClick={addToCartStorage(
-                product,
-                setIsAddedToCart,
-                setCartStorage,
-              )}
+              onClick={() => dispatch(cartActions.add({ product, id: product.id, quantity: 1 }))}
             >
               Add to cart
             </button>
@@ -156,24 +124,16 @@ export const PhoneCard: React.FC<Props> = ({ product }) => {
           <button
             type="button"
             className="product-card__favourites-button"
-            onClick={isAddedToFavourites
-              ? removeFromFavouritesStorage(
-                product,
-                setFavouritesStorage,
-                setIsAddedToFavourites,
-              )
-              : addToFavouritesStorage(
-                product,
-                setFavouritesStorage,
-                setIsAddedToFavourites,
-              )}
+            onClick={() => (favourites.some(favourite => favourite.id === product.id)
+              ? dispatch(favouritesActions.take(product))
+              : dispatch(favouritesActions.add(product)))}
           >
             <div
               className={classNames(
                 'product-card__favourites-icon',
                 {
                   'product-card__favourites-icon--added': (
-                    isAddedToFavourites
+                    favourites.some(favourite => favourite.id === product.id)
                   ),
                 },
               )}

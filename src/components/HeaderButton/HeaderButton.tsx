@@ -4,13 +4,11 @@ import classNames from 'classnames';
 
 import { HeaderButtonIcon } from '../../types/HeaderButtonIcon';
 
-import { CartStorageContext } from '../../contexts/CartStorageContext';
-import {
-  FavouritesStorageContext,
-} from '../../contexts/FavouritesStorageContext';
 import {
   HandleIsMenuActiveContext,
 } from '../../contexts/HandleIsMenuActiveContext';
+
+import { useAppSelector } from '../../store/hooks';
 
 const returnClassName = ({ isActive }: { isActive: boolean }) => (
   classNames(
@@ -26,22 +24,23 @@ type Props = {
 export const HeaderButton: React.FC<Props> = ({ type }) => {
   const [totalQuantity, setTotalQuantity] = useState(0);
 
-  const cartStorage = useContext(CartStorageContext);
-  const favouritesStorage = useContext(FavouritesStorageContext);
   const setIsMenuActive = useContext(HandleIsMenuActiveContext);
+
+  const cart = useAppSelector(state => state.cart);
+  const favourites = useAppSelector(state => state.favourites);
 
   const onClick = () => setIsMenuActive(false);
 
   useEffect(() => {
     const count = (type === HeaderButtonIcon.Favourites)
-      ? favouritesStorage.length
-      : cartStorage.reduce(((
+      ? favourites.length
+      : cart.reduce(((
         total: number,
         { quantity }: { quantity: number },
       ) => total + quantity), 0);
 
     setTotalQuantity(count);
-  }, [cartStorage, favouritesStorage]);
+  }, [cart, favourites]);
 
   return (
     <NavLink

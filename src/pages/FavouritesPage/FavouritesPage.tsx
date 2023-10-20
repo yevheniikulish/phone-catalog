@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -10,17 +9,11 @@ import { BackButton } from '../../components/BackButton';
 import { PhoneCard } from '../../components/PhoneCard';
 import { NoSearchResults } from '../../components/NoSearchResults';
 
-import {
-  FavouritesStorageContext,
-} from '../../contexts/FavouritesStorageContext';
-import {
-  HandleFavouritesStorageContext,
-} from '../../contexts/HandleFavouritesStorageContext';
-import {
-  HandleCartStorageContext,
-} from '../../contexts/HandleCartStorageContext';
-
 import { Phone } from '../../types/Phone';
+
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { actions as favouritesActions } from '../../store/favouritesReducer';
+import { actions as cartActions } from '../../store/cartReducer';
 
 const title = 'Favourites';
 
@@ -31,10 +24,10 @@ export const FavouritesPage = () => {
     setVisibleFavourites,
   ] = useState<Phone[] | null>(null);
 
-  const favouritesStorage = useContext(FavouritesStorageContext);
-  const setFavouritesStorage = useContext(HandleFavouritesStorageContext);
-  const setCartStorage = useContext(HandleCartStorageContext);
   const [appliedQuery, setAppliedQuery] = useState('');
+
+  const dispatch = useAppDispatch();
+  const favourites = useAppSelector(state => state.favourites);
 
   const timerId = useRef(0);
 
@@ -43,17 +36,13 @@ export const FavouritesPage = () => {
   const query = searchParams.get('query')?.split('+').join(' ') || '';
 
   useEffect(() => {
-    setFavouritesStorage(JSON.parse(
-      localStorage.getItem('favourites') || '[]',
-    ));
-    setCartStorage(JSON.parse(
-      localStorage.getItem('cart') || '[]',
-    ));
+    dispatch(cartActions.set());
+    dispatch(favouritesActions.set());
   }, []);
 
   useEffect(() => {
-    setTotalQuantity(favouritesStorage.length);
-  }, [favouritesStorage]);
+    setTotalQuantity(favourites.length);
+  }, [favourites]);
 
   useEffect(() => {
     timerId.current = window.setTimeout(() => {
@@ -64,12 +53,12 @@ export const FavouritesPage = () => {
   }, [query]);
 
   useEffect(() => {
-    const filteredProducts = favouritesStorage?.filter(product => (
+    const filteredProducts = favourites?.filter(product => (
       product.name.trim().toLowerCase().includes(appliedQuery.toLowerCase())
     ));
 
     setVisibleFavourites(filteredProducts || []);
-  }, [appliedQuery, favouritesStorage]);
+  }, [appliedQuery, favourites]);
 
   return (
     <div className="favourites page__cart">
