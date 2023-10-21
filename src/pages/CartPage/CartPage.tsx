@@ -54,10 +54,6 @@ export const CartPage = () => {
     quantity: number,
     operator: Operator,
   ) => () => {
-    if (operator === 'minus' && quantity === 1) {
-      return;
-    }
-
     const newQuantity = quantity + ((operator === 'plus') ? 1 : -1);
 
     const newProductQuantityInfo = cart.find((

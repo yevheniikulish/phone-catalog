@@ -14,17 +14,17 @@ import { Product } from '../../types/Product';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { actions as favouritesActions } from '../../store/favouritesReducer';
 import { actions as cartActions } from '../../store/cartReducer';
+import { filterProducts } from '../../functions/filterProducts';
 
 const title = 'Favourites';
 
 export const FavouritesPage = () => {
-  const [totalQuantity, setTotalQuantity] = useState(0);
   const [
     visibleFavourites,
     setVisibleFavourites,
   ] = useState<Product[] | null>(null);
-
   const [appliedQuery, setAppliedQuery] = useState('');
+  const [isNoSearchResults, setIsNoSearchResults] = useState(false);
 
   const dispatch = useAppDispatch();
   const favourites = useAppSelector(state => state.favourites);
@@ -41,10 +41,6 @@ export const FavouritesPage = () => {
   }, []);
 
   useEffect(() => {
-    setTotalQuantity(favourites.length);
-  }, [favourites]);
-
-  useEffect(() => {
     timerId.current = window.setTimeout(() => {
       setAppliedQuery(query);
     }, 1000);
@@ -53,11 +49,7 @@ export const FavouritesPage = () => {
   }, [query]);
 
   useEffect(() => {
-    const filteredProducts = favourites?.filter(product => (
-      product.name.trim().toLowerCase().includes(appliedQuery.toLowerCase())
-    ));
-
-    setVisibleFavourites(filteredProducts || []);
+    filterProducts(favourites, appliedQuery, setVisibleFavourites, setIsNoSearchResults);
   }, [appliedQuery, favourites]);
 
   return (
@@ -73,17 +65,15 @@ export const FavouritesPage = () => {
       </p>
 
       <div className="favourites__container">
-        {!totalQuantity && (
+        {!favourites.length && (
           <div className="no-results">
             Favourites not found
           </div>
         )}
 
-        {!!totalQuantity && !visibleFavourites?.length && (
+        {isNoSearchResults ? (
           <NoSearchResults title={title} />
-        )}
-
-        {!!totalQuantity && !!visibleFavourites?.length && (
+        ) : (
           <div className="favourites__products">
             {visibleFavourites?.map(product => (
               <ProductCard
