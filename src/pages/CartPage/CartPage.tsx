@@ -66,8 +66,6 @@ export const CartPage = () => {
       product?.id === id
     )) as CartType;
 
-    // localStorage.setItem('cart', JSON.stringify(cart));
-
     dispatch(cartActions.updateQuantity({ ...newProductQuantityInfo, quantity: newQuantity }));
   };
 

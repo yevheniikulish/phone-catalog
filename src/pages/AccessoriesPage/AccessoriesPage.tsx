@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -10,13 +9,6 @@ import { getPhones } from '../../functions/getPhones';
 
 import { Phone } from '../../types/Phone';
 import { Content } from '../../components/Content';
-
-import {
-  HandleCartStorageContext,
-} from '../../contexts/HandleCartStorageContext';
-import {
-  HandleFavouritesStorageContext,
-} from '../../contexts/HandleFavouritesStorageContext';
 
 const title = 'Accessories';
 
@@ -30,9 +22,6 @@ export const AccessoriesPage = () => {
   const [isNoSearchResults, setIsNoSearchResults] = useState(false);
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  const setCartStorage = useContext(HandleCartStorageContext);
-  const setFavouritesStorage = useContext(HandleFavouritesStorageContext);
-
   const timerId = useRef(0);
 
   const [searchParams] = useSearchParams();
@@ -41,11 +30,6 @@ export const AccessoriesPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    setCartStorage(JSON.parse(localStorage.getItem('cart') || '[]'));
-    setFavouritesStorage(
-      JSON.parse(localStorage.getItem('favourites') || '[]'),
-    );
 
     getPhones()
       .then((products: Phone[]) => {
