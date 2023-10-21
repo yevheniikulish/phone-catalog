@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { BackButton } from '../../components/BackButton';
 
 import { CartType } from '../../types/CartType';
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { actions as cartActions } from '../../store/cartReducer';
@@ -35,7 +35,7 @@ export const CartPage = () => {
 
     setTotalPrice(cart.reduce((
       total: number,
-      { quantity, product }: { quantity: number, product: Phone },
+      { quantity, product }: { quantity: number, product: Product },
     ) => total + quantity * (Math.round(product.price / 10) * 10 - 1), 0));
   }, [cart]);
 
@@ -50,7 +50,7 @@ export const CartPage = () => {
   }, []);
 
   const changeQuantity = (
-    product: Phone,
+    product: Product,
     quantity: number,
     operator: Operator,
   ) => () => {

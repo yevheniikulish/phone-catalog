@@ -11,11 +11,11 @@ import { Like } from '../../components/Like';
 import { BackButton } from '../../components/BackButton';
 import { Breadcrumbs } from '../../components/Breadcrumbs';
 
-import { getPhones } from '../../functions/getPhones';
+import { getProducts } from '../../functions/getProducts';
 import { getPhoneInfo } from '../../functions/getProductInfo';
 
-import { PhoneInfo } from '../../types/PhoneInfo';
-import { Phone } from '../../types/Phone';
+import { ProductInfo } from '../../types/ProductInfo';
+import { Product } from '../../types/Product';
 
 import { colors } from '../../services/colors';
 
@@ -25,12 +25,12 @@ import { actions as favouritesActions } from '../../store/favouritesReducer';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const ProductDetailsPage = () => {
-  const [phoneInfo, setPhoneInfo] = useState<PhoneInfo | null>(null);
+  const [phoneInfo, setPhoneInfo] = useState<ProductInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState('');
   const [currentCapacity, setCurrentCapacity] = useState('');
   const [currentColor, setCurrentColor] = useState('');
-  const [phone, setPhone] = useState<Phone | null>(null);
+  const [phone, setPhone] = useState<Product | null>(null);
   const [isError, setIsError] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -45,10 +45,10 @@ export const ProductDetailsPage = () => {
   const { productId } = useParams();
 
   useEffect(() => {
-    getPhones()
+    getProducts()
       .then(phones => {
         setPhone(phones.find((
-          desiredPhone: Phone,
+          desiredPhone: Product,
         ) => desiredPhone.phoneId === productId));
       })
       .catch(() => {

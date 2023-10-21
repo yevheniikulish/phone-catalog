@@ -5,17 +5,17 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { getPhones } from '../../functions/getPhones';
+import { getProducts } from '../../functions/getProducts';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { Content } from '../../components/Content';
 
 const title = 'Mobile phones';
 
 export const PhonesPage = () => {
-  const [phones, setPhones] = useState<Phone[] | null>(null);
-  const [visiblePhones, setVisiblePhones] = useState<Phone[] | null>(null);
+  const [phones, setPhones] = useState<Product[] | null>(null);
+  const [visiblePhones, setVisiblePhones] = useState<Product[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isNoSearchResults, setIsNoSearchResults] = useState(false);
   const [appliedQuery, setAppliedQuery] = useState('');
@@ -29,8 +29,8 @@ export const PhonesPage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getPhones()
-      .then((products: Phone[]) => {
+    getProducts()
+      .then((products: Product[]) => {
         setPhones(products.filter(
           product => product.category === 'phones',
         ));

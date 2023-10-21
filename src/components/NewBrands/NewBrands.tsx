@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { getBrandNewProducts } from '../../functions/getBrandNewProducts';
 
@@ -17,7 +17,7 @@ const title = 'Brands new models';
 const gap = 16;
 
 export const NewBrands = () => {
-  const [products, setProducts] = useState<Phone[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [translate, setTranslate] = useState(0);
   const [isLeftButtonDisabled, setIsLeftButtonDisabled] = useState(false);
   const [isRightButtonDisabled, setIsRightButtonDisabled] = useState(false);

@@ -1,7 +1,7 @@
-import { Phone } from './Phone';
+import { Product } from './Product';
 
 export type CartType = {
-  product: Phone;
+  product: Product;
   id: string;
   quantity: number;
 };

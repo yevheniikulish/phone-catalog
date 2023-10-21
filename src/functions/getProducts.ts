@@ -10,3 +10,7 @@ export const request = (url: string) => {
       return response.json();
     });
 };
+
+export const getProducts = () => {
+  return request('_new/products.json');
+};

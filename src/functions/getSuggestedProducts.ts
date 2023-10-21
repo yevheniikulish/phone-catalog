@@ -1,9 +1,9 @@
-import { getPhones } from './getPhones';
+import { getProducts } from './getProducts';
 
-import { Phone } from '../types/Phone';
+import { Product } from '../types/Product';
 
-const returnRandomList = (products: Phone[]) => {
-  const resultRandomList: Phone[] = [];
+const returnRandomList = (products: Product[]) => {
+  const resultRandomList: Product[] = [];
 
   const max = products.length;
 
@@ -25,6 +25,6 @@ const returnRandomList = (products: Phone[]) => {
 };
 
 export const getSuggestedProducts = () => {
-  return getPhones()
+  return getProducts()
     .then(returnRandomList);
 };

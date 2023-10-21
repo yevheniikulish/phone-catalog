@@ -5,19 +5,19 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { getPhones } from '../../functions/getPhones';
+import { getProducts } from '../../functions/getProducts';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 import { Content } from '../../components/Content';
 
 const title = 'Accessories';
 
 export const AccessoriesPage = () => {
-  const [accessories, setAccessories] = useState<Phone[] | null>(null);
+  const [accessories, setAccessories] = useState<Product[] | null>(null);
   const [
     visibleAccessories,
     setVisibleAccessories,
-  ] = useState<Phone[] | null>(null);
+  ] = useState<Product[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isNoSearchResults, setIsNoSearchResults] = useState(false);
   const [appliedQuery, setAppliedQuery] = useState('');
@@ -31,8 +31,8 @@ export const AccessoriesPage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getPhones()
-      .then((products: Phone[]) => {
+    getProducts()
+      .then((products: Product[]) => {
         setAccessories(products.filter(
           product => product.category === 'accessories',
         ));

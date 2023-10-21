@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Phone } from '../types/Phone';
+import { Product } from '../types/Product';
 
-const initialState: Phone[] = [];
+const initialState: Product[] = [];
 
 const favouritesSlice = createSlice({
   name: 'favourites',
   initialState,
   reducers: {
-    add: (favourites, action: PayloadAction<Phone>) => {
+    add: (favourites, action: PayloadAction<Product>) => {
       favourites.push(action.payload);
       localStorage.setItem('favourites', JSON.stringify(favourites));
     },
-    take: (favourites, action: PayloadAction<Phone>) => {
-      const newFavourites = favourites.filter(phone => phone.id !== action.payload.id);
+    take: (favourites, action: PayloadAction<Product>) => {
+      const newFavourites = favourites.filter(product => product.id !== action.payload.id);
 
       localStorage.setItem('favourites', JSON.stringify(newFavourites));
 

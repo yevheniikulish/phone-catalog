@@ -8,7 +8,7 @@ import React, {
 
 import { getSuggestedProducts } from '../../functions/getSuggestedProducts';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { SliderContent } from '../SliderContent';
 
@@ -17,7 +17,7 @@ const title = 'You may also like';
 const gap = 16;
 
 export const Like = () => {
-  const [products, setProducts] = useState<Phone[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [translate, setTranslate] = useState(0);
   const [isLeftButtonDisabled, setIsLeftButtonDisabled] = useState(false);
   const [isRightButtonDisabled, setIsRightButtonDisabled] = useState(false);

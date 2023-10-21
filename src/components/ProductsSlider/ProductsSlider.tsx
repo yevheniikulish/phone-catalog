@@ -8,7 +8,7 @@ import React, {
 
 import { getHotPriceProducts } from '../../functions/getHotPriceProducts';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { SliderContent } from '../SliderContent';
 
@@ -17,7 +17,7 @@ const title = 'Hot prices';
 const gap = 16;
 
 export const ProductsSlider = () => {
-  const [products, setProducts] = useState<Phone[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [translate, setTranslate] = useState(0);
   const [isLeftButtonDisabled, setIsLeftButtonDisabled] = useState(false);
   const [isRightButtonDisabled, setIsRightButtonDisabled] = useState(false);

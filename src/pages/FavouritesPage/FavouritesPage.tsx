@@ -6,10 +6,10 @@ import React, {
 import { useSearchParams } from 'react-router-dom';
 
 import { BackButton } from '../../components/BackButton';
-import { PhoneCard } from '../../components/PhoneCard';
+import { ProductCard } from '../../components/ProductCard';
 import { NoSearchResults } from '../../components/NoSearchResults';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { actions as favouritesActions } from '../../store/favouritesReducer';
@@ -22,7 +22,7 @@ export const FavouritesPage = () => {
   const [
     visibleFavourites,
     setVisibleFavourites,
-  ] = useState<Phone[] | null>(null);
+  ] = useState<Product[] | null>(null);
 
   const [appliedQuery, setAppliedQuery] = useState('');
 
@@ -86,7 +86,7 @@ export const FavouritesPage = () => {
         {!!totalQuantity && !!visibleFavourites?.length && (
           <div className="favourites__products">
             {visibleFavourites?.map(product => (
-              <PhoneCard
+              <ProductCard
                 key={product.id}
                 product={product}
               />

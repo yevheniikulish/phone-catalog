@@ -1,10 +1,10 @@
-import { getPhones } from './getPhones';
+import { getProducts } from './getProducts';
 
-import { Phone } from '../types/Phone';
+import { Product } from '../types/Product';
 
 export const getHotPriceProducts = () => {
-  return getPhones()
-    .then((products: Phone[]) => products
+  return getProducts()
+    .then((products: Product[]) => products
       .sort((product1, product2) => (
         product2.fullPrice - product1.fullPrice
           + product1.price - product2.price

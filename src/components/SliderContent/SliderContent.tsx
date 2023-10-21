@@ -1,8 +1,8 @@
 import React, { RefObject } from 'react';
 
-import { PhoneCard } from '../PhoneCard';
+import { ProductCard } from '../ProductCard';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 type Props = {
   title: string;
@@ -12,7 +12,7 @@ type Props = {
   isRightButtonDisabled: boolean;
   reference: RefObject<HTMLDivElement>;
   translate: number;
-  products: Phone[];
+  products: Product[];
 };
 
 export const SliderContent: React.FC<Props> = ({
@@ -61,7 +61,7 @@ export const SliderContent: React.FC<Props> = ({
         >
           {products.map(product => {
             return (
-              <PhoneCard
+              <ProductCard
                 product={product}
                 key={product.id}
               />

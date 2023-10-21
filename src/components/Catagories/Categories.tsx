@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
-import { getPhones } from '../../functions/getPhones';
+import { getProducts } from '../../functions/getProducts';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 export const Categories = () => {
   const [tabletsCount, setTabletsCount] = useState(0);
@@ -11,8 +11,8 @@ export const Categories = () => {
   const [phonesCount, setPhonesCount] = useState(0);
 
   useEffect(() => {
-    getPhones()
-      .then((products: Phone[]) => {
+    getProducts()
+      .then((products: Product[]) => {
         setPhonesCount(products.filter(
           product => product.category === 'phones',
         ).length);

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { PhoneCard } from '../PhoneCard';
+import { ProductCard } from '../ProductCard';
 import { Selector } from '../Selector';
 import { Pagination } from '../Pagination';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 type Props = {
-  products: Phone[] | null;
+  products: Product[] | null;
 };
 
 const sortLabels = ['Newest', 'Alphabetically', 'Cheapest'];
@@ -133,7 +133,7 @@ export const List: React.FC<Props> = ({ products }) => {
       <div className="products-list__container">
         {visibleProducts?.map(
           product => (
-            <PhoneCard
+            <ProductCard
               key={product.id}
               product={product}
             />

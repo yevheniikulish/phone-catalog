@@ -1,10 +1,10 @@
-import { getPhones } from './getPhones';
+import { getProducts } from './getProducts';
 
-import { Phone } from '../types/Phone';
+import { Product } from '../types/Product';
 
 export const getBrandNewProducts = () => {
-  return getPhones()
-    .then((products: Phone[]) => products
+  return getProducts()
+    .then((products: Product[]) => products
       .filter(product => product.year === 2019)
       .sort((product1, product2) => (
         product2.fullPrice - product1.fullPrice

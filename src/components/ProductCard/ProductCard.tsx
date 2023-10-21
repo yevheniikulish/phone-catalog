@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { actions as cartActions } from '../../store/cartReducer';
 import { actions as favouritesActions } from '../../store/favouritesReducer';
 
 type Props = {
-  product: Phone;
+  product: Product;
 };
 
-export const PhoneCard: React.FC<Props> = ({ product }) => {
+export const ProductCard: React.FC<Props> = ({ product }) => {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(state => state.cart);
   const favourites = useAppSelector(state => state.favourites);

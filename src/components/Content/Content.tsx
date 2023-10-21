@@ -7,10 +7,10 @@ import { NoResults } from '../NoResults';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { NoSearchResults } from '../NoSearchResults';
 
-import { Phone } from '../../types/Phone';
+import { Product } from '../../types/Product';
 
 type Props = {
-  products: Phone[] | null;
+  products: Product[] | null;
   isLoading: boolean;
   title: string;
   isNoSearchResults: boolean;
