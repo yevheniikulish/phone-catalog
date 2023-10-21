@@ -65,6 +65,10 @@ export const CartPage = () => {
     dispatch(cartActions.updateQuantity({ ...newProductQuantityInfo, quantity: newQuantity }));
   };
 
+  const takeProductFromCart = (product: Product, quantity: number, id: string) => () => {
+    dispatch(cartActions.take({ product, quantity, id }));
+  };
+
   return (
     <div className="cart page__cart">
       <BackButton />
@@ -94,7 +98,7 @@ export const CartPage = () => {
                         'cart__delete-button--tablet',
                       )}
                       aria-label="Delete"
-                      onClick={() => dispatch(cartActions.take({ product, quantity, id }))}
+                      onClick={takeProductFromCart(product, quantity, id)}
                       data-cy="cartDeleteButton"
                     />
 
@@ -144,7 +148,7 @@ export const CartPage = () => {
                       type="button"
                       className="cart__delete-button cart__delete-button--phone"
                       aria-label="Delete"
-                      onClick={() => dispatch(cartActions.take({ product, quantity, id }))}
+                      onClick={takeProductFromCart(product, quantity, id)}
                       data-cy="cartDeleteButton"
                     />
                   </div>

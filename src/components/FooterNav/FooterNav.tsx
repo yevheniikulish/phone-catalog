@@ -27,7 +27,7 @@ export const FooterNav = () => (
 
       <li className="nav__item">
         <a
-          href="https://mate.academy"
+          href="https://github.com/yevheniikulish"
           target="_blank"
           className="nav__link"
           rel="noreferrer"

@@ -27,6 +27,18 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
     phoneId,
   } = product;
 
+  const addProductToCart = () => {
+    dispatch(cartActions.add({ product, id: product.id, quantity: 1 }));
+  };
+
+  const takeProductFromCart = () => {
+    dispatch(cartActions.take({ product, id: product.id, quantity: 1 }));
+  };
+
+  const toggleFavouritesButton = () => (favourites.some(favourite => favourite.id === product.id)
+    ? dispatch(favouritesActions.take(product))
+    : dispatch(favouritesActions.add(product)));
+
   useEffect(() => {
     dispatch(cartActions.set());
     dispatch(favouritesActions.set());
@@ -100,14 +112,14 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         </div>
 
         <div className="product-card__interaction-block">
-          {cart.some(c => c.id === product.id) ? (
+          {cart.some(productFromCart => productFromCart.id === product.id) ? (
             <button
               className={classNames(
                 'product-card__cart-button',
                 'product-card__cart-button--added',
               )}
               type="button"
-              onClick={() => dispatch(cartActions.take({ product, id: product.id, quantity: 1 }))}
+              onClick={takeProductFromCart}
             >
               Added to cart
             </button>
@@ -115,7 +127,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
             <button
               className="product-card__cart-button"
               type="button"
-              onClick={() => dispatch(cartActions.add({ product, id: product.id, quantity: 1 }))}
+              onClick={addProductToCart}
             >
               Add to cart
             </button>
@@ -124,9 +136,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           <button
             type="button"
             className="product-card__favourites-button"
-            onClick={() => (favourites.some(favourite => favourite.id === product.id)
-              ? dispatch(favouritesActions.take(product))
-              : dispatch(favouritesActions.add(product)))}
+            onClick={toggleFavouritesButton}
           >
             <div
               className={classNames(

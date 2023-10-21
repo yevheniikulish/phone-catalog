@@ -6,9 +6,10 @@ import React, {
   useState,
 } from 'react';
 
-import { getHotPriceProducts } from '../../functions/getHotPriceProducts';
-
 import { Product } from '../../types/Product';
+
+import { getHotPriceProducts } from '../../functions/getHotPriceProducts';
+import { setDisabledButton } from '../../functions/setDisabledButton';
 
 import { SliderContent } from '../SliderContent';
 
@@ -51,14 +52,13 @@ export const ProductsSlider = () => {
   }, []);
 
   useEffect(() => {
-    if (translate === 0) {
-      setIsLeftButtonDisabled(true);
-    } else if ((products.length - 4) * elementWidth === -translate) {
-      setIsRightButtonDisabled(true);
-    } else {
-      setIsLeftButtonDisabled(false);
-      setIsRightButtonDisabled(false);
-    }
+    setDisabledButton(
+      setIsLeftButtonDisabled,
+      setIsRightButtonDisabled,
+      products,
+      elementWidth,
+      translate,
+    );
   }, [translate]);
 
   const onLeftClick = () => {

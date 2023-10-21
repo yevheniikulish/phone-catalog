@@ -39,17 +39,15 @@ export const Content: React.FC<Props> = ({
           {`${products?.length} model${products?.length === 1 ? '' : 's'}`}
         </p>
 
-        {!isNoSearchResults && !products?.length && (
-          <NoResults title={title} />
-        )}
-
-        {!isNoSearchResults && !!products?.length && (
-          <List products={products} />
-        )}
-
         {isNoSearchResults && (
           <NoSearchResults title={title} />
         )}
+
+        {!isNoSearchResults && (!products?.length ? (
+          <NoResults title={title} />
+        ) : (
+          <List products={products} />
+        ))}
       </>
     )}
   </div>

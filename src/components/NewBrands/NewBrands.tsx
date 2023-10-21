@@ -9,6 +9,7 @@ import React, {
 import { Product } from '../../types/Product';
 
 import { getBrandNewProducts } from '../../functions/getBrandNewProducts';
+import { setDisabledButton } from '../../functions/setDisabledButton';
 
 import { SliderContent } from '../SliderContent';
 
@@ -51,20 +52,13 @@ export const NewBrands = () => {
   }, []);
 
   useEffect(() => {
-    if (translate === 0) {
-      setIsLeftButtonDisabled(true);
-
-      return;
-    }
-
-    if ((products.length - 4) * elementWidth === -translate) {
-      setIsRightButtonDisabled(true);
-
-      return;
-    }
-
-    setIsLeftButtonDisabled(false);
-    setIsRightButtonDisabled(false);
+    setDisabledButton(
+      setIsLeftButtonDisabled,
+      setIsRightButtonDisabled,
+      products,
+      elementWidth,
+      translate,
+    );
   }, [translate]);
 
   const onLeftClick = () => {

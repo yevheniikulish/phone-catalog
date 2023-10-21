@@ -11,6 +11,7 @@ import { getSuggestedProducts } from '../../functions/getSuggestedProducts';
 import { Product } from '../../types/Product';
 
 import { SliderContent } from '../SliderContent';
+import { setDisabledButton } from '../../functions/setDisabledButton';
 
 const title = 'You may also like';
 
@@ -51,14 +52,13 @@ export const Like = () => {
   }, []);
 
   useEffect(() => {
-    if (translate === 0) {
-      setIsLeftButtonDisabled(true);
-    } else if ((products.length - 4) * elementWidth === -translate) {
-      setIsRightButtonDisabled(true);
-    } else {
-      setIsLeftButtonDisabled(false);
-      setIsRightButtonDisabled(false);
-    }
+    setDisabledButton(
+      setIsLeftButtonDisabled,
+      setIsRightButtonDisabled,
+      products,
+      elementWidth,
+      translate,
+    );
   }, [translate]);
 
   const onLeftClick = () => {
