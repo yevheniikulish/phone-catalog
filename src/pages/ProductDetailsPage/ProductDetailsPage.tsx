@@ -17,7 +17,7 @@ import { ProductInfo } from '../../types/ProductInfo';
 import { Product } from '../../types/Product';
 
 import { colors } from '../../services/colors';
-import { specsNames } from '../../services/specs';
+import { info, specsNames } from '../../services/specs';
 
 import { actions as cartActions } from '../../store/cartReducer';
 import { actions as favouritesActions } from '../../store/favouritesReducer';
@@ -264,45 +264,17 @@ export const ProductDetailsPage = () => {
                 </div>
 
                 <div className="product-details__info">
-                  <div className="product-details__info-row">
-                    <p className="product-details__info-name">
-                      Screen
-                    </p>
+                  {info.map(specName => (
+                    <div className="product-details__info-row" key={specName}>
+                      <p className="product-details__info-name">
+                        {specName}
+                      </p>
 
-                    <p className="product-details__info-value">
-                      {productInfo?.screen}
-                    </p>
-                  </div>
-
-                  <div className="product-details__info-row">
-                    <p className="product-details__info-name">
-                      Resolution
-                    </p>
-
-                    <p className="product-details__info-value">
-                      {productInfo?.resolution}
-                    </p>
-                  </div>
-
-                  <div className="product-details__info-row">
-                    <p className="product-details__info-name">
-                      Processor
-                    </p>
-
-                    <p className="product-details__info-value">
-                      {productInfo?.processor}
-                    </p>
-                  </div>
-
-                  <div className="product-details__info-row">
-                    <p className="product-details__info-name">
-                      RAM
-                    </p>
-
-                    <p className="product-details__info-value">
-                      {productInfo?.ram}
-                    </p>
-                  </div>
+                      <p className="product-details__info-value">
+                        {productInfo && productInfo[specName.toLowerCase()]}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
