@@ -4,6 +4,7 @@ type Description = {
 };
 
 export type ProductInfo = {
+  [key: string]: string | string[] | number | Description[],
   id: string;
   namespaceId: string;
   name: string;

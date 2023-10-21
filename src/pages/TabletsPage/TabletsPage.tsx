@@ -5,10 +5,12 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { getProducts } from '../../functions/getProducts';
+import { Content } from '../../components/Content';
 
 import { Product } from '../../types/Product';
-import { Content } from '../../components/Content';
+
+import { getProductsOfCategory } from '../../functions/getProductsOfCategory';
+import { filterProducts } from '../../functions/filterProducts';
 
 const title = 'Tablets';
 
@@ -26,18 +28,7 @@ export const TabletsPage = () => {
   const query = searchParams.get('query')?.split('+').join(' ') || '';
 
   useEffect(() => {
-    setIsLoading(true);
-
-    getProducts()
-      .then((products: Product[]) => {
-        setTablets(products.filter(
-          product => product.category === 'tablet',
-        ));
-      })
-      .catch(() => {
-        throw new Error('Loading phones error');
-      })
-      .finally(() => setIsLoading(false));
+    getProductsOfCategory('tablets', setTablets, setIsLoading);
   }, []);
 
   useEffect(() => {
@@ -49,13 +40,7 @@ export const TabletsPage = () => {
   }, [query]);
 
   useEffect(() => {
-    const filteredProducts = tablets?.filter(product => (
-      product.name.trim().toLowerCase().includes(appliedQuery.toLowerCase())
-    ));
-
-    setVisibleTablets(filteredProducts || []);
-
-    setIsNoSearchResults(!filteredProducts?.length && !!tablets?.length);
+    filterProducts(tablets, appliedQuery, setVisibleTablets, setIsNoSearchResults);
   }, [appliedQuery, tablets]);
 
   return (

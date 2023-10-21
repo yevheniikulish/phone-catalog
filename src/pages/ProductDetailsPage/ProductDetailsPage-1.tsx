@@ -17,7 +17,6 @@ import { ProductInfo } from '../../types/ProductInfo';
 import { Product } from '../../types/Product';
 
 import { colors } from '../../services/colors';
-import { specsNames } from '../../services/specs';
 
 import { actions as cartActions } from '../../store/cartReducer';
 import { actions as favouritesActions } from '../../store/favouritesReducer';
@@ -346,17 +345,85 @@ export const ProductDetailsPage = () => {
 
                 <div className="product-details__line" />
 
-                {specsNames.map(specName => (
-                  <div className="product-details__specs-row" key={specName}>
-                    <p className="product-details__specs-name">
-                      {specName === 'Capacity' ? 'Built in memory' : specName}
-                    </p>
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Screen
+                  </p>
 
-                    <p className="product-details__specs-value">
-                      {productInfo && productInfo[specName.toLowerCase()]}
-                    </p>
-                  </div>
-                ))}
+                  <p className="product-details__specs-value">
+                    {productInfo?.screen}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Resolution
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.resolution}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Processor
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.processor}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    RAM
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.ram}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Built in memory
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.capacity}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Camera
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.camera}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Zoom
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.zoom}
+                  </p>
+                </div>
+
+                <div className="product-details__specs-row">
+                  <p className="product-details__specs-name">
+                    Cell
+                  </p>
+
+                  <p className="product-details__specs-value">
+                    {productInfo?.cell}
+                  </p>
+                </div>
               </div>
             </div>
 

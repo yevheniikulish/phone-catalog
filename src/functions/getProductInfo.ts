@@ -1,5 +1,5 @@
 import { request } from './getProducts';
 
-export const getPhoneInfo = (productId: string) => {
+export const getProductInfo = (productId: string) => {
   return request(`_new/products/${productId}.json`);
 };

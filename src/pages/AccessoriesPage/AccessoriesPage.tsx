@@ -5,10 +5,12 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { getProducts } from '../../functions/getProducts';
+import { Content } from '../../components/Content';
 
 import { Product } from '../../types/Product';
-import { Content } from '../../components/Content';
+
+import { getProductsOfCategory } from '../../functions/getProductsOfCategory';
+import { filterProducts } from '../../functions/filterProducts';
 
 const title = 'Accessories';
 
@@ -29,18 +31,7 @@ export const AccessoriesPage = () => {
   const query = searchParams.get('query')?.split('+').join(' ') || '';
 
   useEffect(() => {
-    setIsLoading(true);
-
-    getProducts()
-      .then((products: Product[]) => {
-        setAccessories(products.filter(
-          product => product.category === 'accessories',
-        ));
-      })
-      .catch(() => {
-        throw new Error('Loading phones error');
-      })
-      .finally(() => setIsLoading(false));
+    getProductsOfCategory('accessories', setAccessories, setIsLoading);
   }, []);
 
   useEffect(() => {
@@ -52,13 +43,7 @@ export const AccessoriesPage = () => {
   }, [query]);
 
   useEffect(() => {
-    const filteredProducts = accessories?.filter(product => (
-      product.name.trim().toLowerCase().includes(appliedQuery.toLowerCase())
-    ));
-
-    setVisibleAccessories(filteredProducts || []);
-
-    setIsNoSearchResults(!filteredProducts?.length && !!accessories?.length);
+    filterProducts(accessories, appliedQuery, setVisibleAccessories, setIsNoSearchResults);
   }, [appliedQuery, accessories]);
 
   return (

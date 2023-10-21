@@ -5,11 +5,12 @@ import React, {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { getProducts } from '../../functions/getProducts';
+import { Content } from '../../components/Content';
 
 import { Product } from '../../types/Product';
 
-import { Content } from '../../components/Content';
+import { getProductsOfCategory } from '../../functions/getProductsOfCategory';
+import { filterProducts } from '../../functions/filterProducts';
 
 const title = 'Mobile phones';
 
@@ -27,18 +28,7 @@ export const PhonesPage = () => {
   const query = searchParams.get('query')?.split('+').join(' ') || '';
 
   useEffect(() => {
-    setIsLoading(true);
-
-    getProducts()
-      .then((products: Product[]) => {
-        setPhones(products.filter(
-          product => product.category === 'phones',
-        ));
-      })
-      .catch(() => {
-        throw new Error('Loading phones error');
-      })
-      .finally(() => setIsLoading(false));
+    getProductsOfCategory('phones', setPhones, setIsLoading);
   }, []);
 
   useEffect(() => {
@@ -50,13 +40,7 @@ export const PhonesPage = () => {
   }, [query]);
 
   useEffect(() => {
-    const filteredProducts = phones?.filter(product => (
-      product.name.trim().toLowerCase().includes(appliedQuery.toLowerCase())
-    ));
-
-    setVisiblePhones(filteredProducts || []);
-
-    setIsNoSearchResults(!filteredProducts?.length && !!phones?.length);
+    filterProducts(phones, appliedQuery, setVisiblePhones, setIsNoSearchResults);
   }, [appliedQuery, phones]);
 
   return (
