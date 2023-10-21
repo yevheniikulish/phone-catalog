@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
-import { IsMenuActiveContext } from '../../contexts/IsMenuActiveContext';
-import {
-  HandleIsMenuActiveContext,
-} from '../../contexts/HandleIsMenuActiveContext';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { actions as menuActions } from '../../store/menuReducer';
 
 const returnClass = ({ isActive }: { isActive: boolean }) => classNames(
   'menu__nav-link',
@@ -13,11 +11,15 @@ const returnClass = ({ isActive }: { isActive: boolean }) => classNames(
 );
 
 export const Menu = () => {
-  const isActive = useContext(IsMenuActiveContext);
-  const setIsActive = useContext(HandleIsMenuActiveContext);
+  const dispatch = useAppDispatch();
+  const isMenuActive = useAppSelector(state => state.menu);
 
   const handleState = () => {
-    setIsActive(!isActive);
+    if (isMenuActive) {
+      dispatch(menuActions.close());
+    } else {
+      dispatch(menuActions.open());
+    }
   };
 
   return (
@@ -25,7 +27,7 @@ export const Menu = () => {
       <button
         className={classNames(
           'menu__icon',
-          { 'menu__icon--active': isActive },
+          { 'menu__icon--active': isMenuActive },
         )}
         type="button"
         aria-label="Menu"
@@ -35,7 +37,7 @@ export const Menu = () => {
       <ul
         className={classNames(
           'menu__nav-list',
-          { 'menu__nav-list--active': isActive },
+          { 'menu__nav-list--active': isMenuActive },
         )}
       >
         <li className="menu__nav-item">

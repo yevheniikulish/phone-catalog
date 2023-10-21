@@ -1,14 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  HandleIsMenuActiveContext,
-} from '../../contexts/HandleIsMenuActiveContext';
+import { useAppDispatch } from '../../store/hooks';
+import { actions as menuActions } from '../../store/menuReducer';
 
 export const Logo = () => {
-  const setIsMenuActive = useContext(HandleIsMenuActiveContext);
+  const dispatch = useAppDispatch();
 
-  const onClick = () => setIsMenuActive(false);
+  const onClick = () => dispatch(menuActions.close());
 
   return (
     <Link

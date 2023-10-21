@@ -1,14 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { HeaderButtonIcon } from '../../types/HeaderButtonIcon';
 
-import {
-  HandleIsMenuActiveContext,
-} from '../../contexts/HandleIsMenuActiveContext';
-
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { actions as menuActions } from '../../store/menuReducer';
 
 const returnClassName = ({ isActive }: { isActive: boolean }) => (
   classNames(
@@ -24,12 +21,12 @@ type Props = {
 export const HeaderButton: React.FC<Props> = ({ type }) => {
   const [totalQuantity, setTotalQuantity] = useState(0);
 
-  const setIsMenuActive = useContext(HandleIsMenuActiveContext);
+  const dispatch = useAppDispatch();
 
   const cart = useAppSelector(state => state.cart);
   const favourites = useAppSelector(state => state.favourites);
 
-  const onClick = () => setIsMenuActive(false);
+  const onClick = () => dispatch(menuActions.close());
 
   useEffect(() => {
     const count = (type === HeaderButtonIcon.Favourites)

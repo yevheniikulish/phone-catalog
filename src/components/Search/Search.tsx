@@ -1,21 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import classNames from 'classnames';
-
-import {
-  HandleIsMenuActiveContext,
-} from '../../contexts/HandleIsMenuActiveContext';
+import { useAppDispatch } from '../../store/hooks';
+import { actions as menuActions } from '../../store/menuReducer';
 
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const setIsMenuActive = useContext(HandleIsMenuActiveContext);
+  const dispatch = useAppDispatch();
 
   const location = useLocation();
 
   const query = searchParams.get('query') || '';
 
-  const onClick = () => setIsMenuActive(false);
+  const onClick = () => dispatch(menuActions.close());
 
   const isSearch = (location.pathname === '/favourites')
     || (location.pathname === '/phones')
